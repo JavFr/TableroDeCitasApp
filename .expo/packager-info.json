@@ -2,8 +2,8 @@
   "devToolsPort": 19002,
   "expoServerPort": 19000,
   "packagerPort": 19001,
-  "packagerPid": 2229,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null
+  "packagerPid": 2769,
+  "expoServerNgrokUrl": "https://wm-6w7.anonymous.tablerodecitasapp.exp.direct",
+  "packagerNgrokUrl": "https://packager.wm-6w7.anonymous.tablerodecitasapp.exp.direct",
+  "ngrokPid": 2821
 }

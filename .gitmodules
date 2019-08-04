@@ -1,0 +1,6 @@
+[submodule "redux/TablerodeCitas-Redux"]
+	path = redux/TablerodeCitas-Redux
+	url = https://github.com/JavFr/TablerodeCitas-Redux.git
+[submodule "TablerodeCitas-Redux"]
+	path = TablerodeCitas-Redux
+	url = https://github.com/JavFr/TablerodeCitas-Redux.git
