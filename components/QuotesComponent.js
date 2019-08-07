@@ -1,39 +1,46 @@
 import React, {Component} from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { ListItem } from 'react-native-elements'
-import { QUOTES } from '../shared/quotes';
+import { connect } from 'react-redux';
+import { baseUrl } from '../shared/baseUrl';
+import RenderListQuotes from './RenderListQuotes';
+import {Loading} from './LoadingComponent';
 
-export default class Quotes extends Component {
+const mapStateToProps = state => {
+    return {
+      quotes: state.quotes
+    }
+  }
+
+class Quotes extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            quotes: QUOTES
-        }
     }
     static navigationOptions = {
         title: 'Citas'
     }
     render(){
+        
         const { navigate } = this.props.navigation;
-        const renderAuthorItem = ({item, index}) => {
+        /*const authorFilter = this.props.navigation.getParam('authorFilter', '');
+        if (authorFilter == '') {
             return(
-                <ListItem
-                    key={index}
-                    leftAvatar={item.authorAvatar != ''? {source: item.authorAvatar} : {title: item.name[0]}}
-                    title={item.quote.length <= 50? item.quote : item.quote.slice(0,50) + '...'} 
-                    subtitle={item.author}
-                    onPress={() => navigate('Home', {quoteId: item.id})}
-                />
-            );
-
+                <View></View>
+             );
+        }*/
+        if (this.props.quotes.isLoading) {
+            return (<Loading />);
+            
         }
-        return(
-            <FlatList
-                data={this.state.quotes}
-                renderItem={renderAuthorItem}
-                keyExtractor={item => item.id.toString()}
-                />
-        );  
+        else if (this.props.quotes.errMess) {
+            return (<View><Text>{this.props.quotes.errMess}</Text></View>);
+        }
+        else {
+            return(
+                <RenderListQuotes quotes={this.props.quotes.quotes} onPress={(param) => navigate('Quote', param)}/>
+            );
+        }
     }
 }
     
+export default connect(mapStateToProps)(Quotes);

@@ -7,13 +7,31 @@ import Authors from './AuthorsComponent';
 import Quotes from './QuotesComponent';
 import Books from './BooksComponent';
 import Quote from './QuoteComponent';
+import { connect } from 'react-redux';
+import { fetchQuotes, fetchAuthors, fetchBooks } from '../TablerodeCitas-Redux/ActionCreators';
 
-/////////// Navigation ////////////
+
+const mapStateToProps = state => {
+    return {
+      quotes: state.quotes,
+      authors: state.authors,
+      books: state.books
+    }
+  }
+
+const mapDispatchToProps = dispatch => ({
+  fetchQuotes: () => dispatch(fetchQuotes()),
+  fetchAuthors: () => dispatch(fetchAuthors()),
+  fetchBooks: () => dispatch(fetchBooks())
+})
+
+  
+
+/////////////////////////////////// Navigation ////////////////////////////////////////////////////
 const HomeNavigator = createStackNavigator(
     {
         Home: {screen: Home,
             navigationOptions: ({ navigation }) => ({
-                //Common config for all the screens
                 headerStyle: {
                     backgroundColor: '#512DA8'
                 },
@@ -34,7 +52,6 @@ const BooksNavigator = createStackNavigator(
         Books: {
             screen: Books,
             navigationOptions: ({ navigation }) => ({
-                //Common config for all the screens
                 headerStyle: {
                     backgroundColor: '#512DA8'
                 },
@@ -48,7 +65,8 @@ const BooksNavigator = createStackNavigator(
                 headerLeft: <Icon name='menu' size={24} color='white'
                                 onPress={() => navigation.toggleDrawer()}
                             />
-            })}       
+            })
+        }       
     }
 );
 const QuotesNavigator = createStackNavigator(
@@ -70,7 +88,8 @@ const QuotesNavigator = createStackNavigator(
                 headerLeft: <Icon name='menu' size={24} color='white'
                                 onPress={() => navigation.toggleDrawer()}
                             />
-            })}
+            })
+        }
     }
 );
 const AuthorsNavigator = createStackNavigator(
@@ -78,7 +97,6 @@ const AuthorsNavigator = createStackNavigator(
         Authors: {
             screen: Authors,
             navigationOptions: ({ navigation }) => ({
-                //Common config for all the screens
                 headerStyle: {
                     backgroundColor: '#512DA8'
                 },
@@ -92,10 +110,11 @@ const AuthorsNavigator = createStackNavigator(
                 headerLeft: <Icon name='menu' size={24} color='white'
                                 onPress={() => navigation.toggleDrawer()}
                             />
-            })}
+            })
+        }
     }
 );
-const QuoteNavigator = createStackNavigator(
+/*const QuoteNavigator = createStackNavigator(
     {
         Quote: {
             screen: Quote,
@@ -117,6 +136,7 @@ const QuoteNavigator = createStackNavigator(
             })}
     }
 );
+*/
 const CustomDrawerContentComponent = (props) => (
     <ScrollView>
         <SafeAreaView style={styles.container}
@@ -198,7 +218,7 @@ const MainNavigator = createDrawerNavigator(
                         />
                 )
             }
-        },
+        }/*,
         Quote: {
             screen: QuoteNavigator,
             navigationOptions: {
@@ -213,7 +233,7 @@ const MainNavigator = createDrawerNavigator(
                         />
                 )
             }
-        }
+        }*/
          
     },
     {
@@ -224,7 +244,18 @@ const MainNavigator = createDrawerNavigator(
   
 const MainContainer = createAppContainer(MainNavigator);
 
-export default class Main extends Component {
+class Main extends Component {
+
+    constructor(props){
+        super(props);
+    }
+
+    componentDidMount() {
+        this.props.fetchQuotes();
+        this.props.fetchAuthors();
+        this.props.fetchBooks();
+      }
+
     render () {
         return (
             <MainContainer style={{flex: 1}}/>
@@ -232,7 +263,7 @@ export default class Main extends Component {
     }
 }
 
-
+export default connect(mapStateToProps, mapDispatchToProps)(Main);
 
 const styles = StyleSheet.create({
     container: {

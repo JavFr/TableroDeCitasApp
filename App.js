@@ -1,10 +1,16 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import Main from './components/MainComponent';
+import { Provider } from 'react-redux';
+import { ConfigureStore } from './TablerodeCitas-Redux/configureStore';
+
+const store = ConfigureStore();
 
 export default function App() {
   return (
-    <Main style={styles.container} />
+    <Provider store={store}>
+      <Main style={styles.container} />
+    </Provider>    
   );
 }
 

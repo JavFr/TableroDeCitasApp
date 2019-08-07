@@ -1,17 +1,20 @@
 import React, {Component} from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { ListItem } from 'react-native-elements';
+import { connect } from 'react-redux';
+import { baseUrl } from '../shared/baseUrl';
+import  RenderListAuthors  from './RenderListAuthors';
 
-import { AUTHORS } from '../shared/authors';
+const mapStateToProps = state => {
+    return {
+        authors: state.authors
+      }
+}
 
-export default class Authors extends Component{
+class Authors extends Component{
 
     constructor(props) {
         super(props);
-
-        this.state = {
-            authors: AUTHORS
-        }
     }
 
     static navigationOptions = {
@@ -19,26 +22,19 @@ export default class Authors extends Component{
     }
 
     render(){
-        const { navigate } = this.props.navigation;
-        const renderAuthorItem = ({item, index}) => {
-            return(
-                <ListItem
-                    key={index}
-                    leftAvatar={item.image != ''? {source: item.image} : {title: item.name[0]}}
-                    title={item.name}
-                    subtitle={item.country}
-                    onPress={() => navigate('Quotes', {authorFilter: item.name})}
-                />
-            );
-
+        if (this.props.authors.isLoading) {
+            return(<Loading />);
         }
-        return(
-            <FlatList
-                data={this.state.authors}
-                renderItem={renderAuthorItem}
-                keyExtractor={item => item.id.toString()}
-                />
-        );  
+        else if (this.props.authors.errMess) {
+            return(<View><Text>{this.props.authors.errMess}</Text></View>);
+        }
+        else{
+            return(
+                <RenderListAuthors authors={this.props.authors.authors} />
+            ); 
+        }
     }
     
 }
+
+export default connect(mapStateToProps)(Authors);
