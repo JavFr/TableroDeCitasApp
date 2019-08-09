@@ -1,8 +1,15 @@
+//MODULES
 import React, {Component} from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { connect } from 'react-redux';
+
+//COMPONENTS
 import RenderListBooks from './RenderListBooks';
 import { Loading } from './LoadingComponent';
+import { ToggleForms } from './ToggleFormsComponent';
+
+//REDUX
+import { connect } from 'react-redux';
+
 
 const mapStateToProps = state => {
     return{
@@ -11,6 +18,10 @@ const mapStateToProps = state => {
 }
 
 class Books extends Component {
+
+    static navigationOptions = {
+        title: 'Libros'
+    }
     
     render(){
         if (this.props.books.isLoading) {
@@ -22,7 +33,10 @@ class Books extends Component {
         }
         else {
             return(
-                <RenderListBooks books={this.props.books.books}/>
+                <View style={{flex: 1}}>
+                    <RenderListBooks books={this.props.books.books} onPress={(param) => this.props.navigation.navigate('Quotes', param)}/>
+                    <ToggleForms onPress={(params) => this.props.navigation.navigate(params)}/>
+                </View>
             );
         }
     }

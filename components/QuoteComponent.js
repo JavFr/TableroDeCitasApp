@@ -1,25 +1,46 @@
+//MODULES
 import React, {Component} from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Card, Icon, Avatar, SocialIcon, ButtonGroup, SearchBar } from 'react-native-elements';
+import { View, Text } from 'react-native';
+
+//COMPONENTS
+//import RenderQuoteComponent from './RenderQuoteComponent';
+import RenderFullQuote from './RenderQuoteComponent';
+import {Loading} from './LoadingComponent';
+
+//REDUX
 import { connect } from 'react-redux';
-import { baseUrl } from '../shared/baseUrl';
-import RenderQuoteComponent from './RenderQuoteComponent';
 
 const mapStateToProps = state => {
     return {
       quotes: state.quotes
     }
-  }
+  } 
 
 class Quote extends Component {
     constructor(props){
         super(props);
     }
+
+    static navigationOptions = {
+        title: 'Cita',
+      };
+
     render () {
-        const quoteId = this.props.navigation.getParam('quoteId', '');
-        return(
-            <RenderQuoteComponent quote={this.props.quotes.quotes[quoteId]} />
-        );
+        if (this.props.quotes.isLoading) {
+            return (<Loading />);
+            
+        }
+        else if (this.props.quotes.errMess) {
+            return (<View><Text>{this.props.quotes.errMess}</Text></View>);
+        }
+        else {
+            return(
+                <View style={{flex: 1}}>
+                    <RenderFullQuote quote={this.props.quotes.quotes[this.props.navigation.getParam('quoteId')]}/>);
+                    <ToggleForms onPress={(params) => this.props.navigation.navigate(params)}/>
+                </View>
+            );
+        }
     }
 }
 

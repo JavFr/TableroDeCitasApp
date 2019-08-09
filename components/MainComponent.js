@@ -1,16 +1,28 @@
+//MODULES
 import React, {Component} from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { Icon, Image } from 'react-native-elements';
 import { createStackNavigator,  createAppContainer, createDrawerNavigator, SafeAreaView, DrawerItems } from 'react-navigation';
+
+
+//COMPONENTS
 import Home from './HomeComponent';
 import Authors from './AuthorsComponent';
 import Quotes from './QuotesComponent';
 import Books from './BooksComponent';
 import Quote from './QuoteComponent';
+import AuthorsModal from './AuthorsModalComponent';
+import QuotesModal from './QuotesModalComponent';
+import BooksModal from './BooksModalComponent';
+
+//REDUX
 import { connect } from 'react-redux';
 import { fetchQuotes, fetchAuthors, fetchBooks } from '../TablerodeCitas-Redux/ActionCreators';
 
 
+
+
+//REDUX TO PROPS
 const mapStateToProps = state => {
     return {
       quotes: state.quotes,
@@ -27,7 +39,8 @@ const mapDispatchToProps = dispatch => ({
 
   
 
-/////////////////////////////////// Navigation ////////////////////////////////////////////////////
+/////////////////       NAVIGATION              ///////////////////////////////
+
 const HomeNavigator = createStackNavigator(
     {
         Home: {screen: Home,
@@ -66,7 +79,47 @@ const BooksNavigator = createStackNavigator(
                                 onPress={() => navigation.toggleDrawer()}
                             />
             })
-        }       
+        },
+        Quotes: {
+            screen: Quotes,
+            navigationOptions: ({ navigation }) => ({
+                //Common config for all the screens
+                headerStyle: {
+                    backgroundColor: '#512DA8'
+                },
+                headerTintColor: '#fff',
+                headerTitleStyle: {
+                    color: '#fff'
+                },
+                headerLeftContainerStyle: {
+                    paddingLeft: 20
+                },
+                headerLeft: <Icon name='arrow-left' type="font-awesome" size={22} color='white'
+                                onPress={() => navigation.navigate('Books')}
+                            />
+            })
+        },
+        Quote: {
+            screen: Quote,
+            navigationOptions: ({ navigation }) => ({
+                //Common config for all the screens
+                headerStyle: {
+                    backgroundColor: '#512DA8'
+                },
+                headerTintColor: '#fff',
+                headerTitleStyle: {
+                    color: '#fff'
+                },
+                headerLeftContainerStyle: {
+                    paddingLeft: 20
+                },
+                headerLeft: <Icon name='arrow-left' type="font-awesome" size={22} color='white'
+                                onPress={() => navigation.goBack()}
+                            />
+            })}       
+    },
+    {
+        initialRouteName: 'Books'
     }
 );
 const QuotesNavigator = createStackNavigator(
@@ -89,7 +142,29 @@ const QuotesNavigator = createStackNavigator(
                                 onPress={() => navigation.toggleDrawer()}
                             />
             })
-        }
+        },
+        Quote: {
+            screen: Quote,
+            navigationOptions: ({ navigation }) => ({
+                //Common config for all the screens
+                headerStyle: {
+                    backgroundColor: '#512DA8'
+                },
+                headerTintColor: '#fff',
+                headerTitleStyle: {
+                    color: '#fff'
+                },
+                headerLeftContainerStyle: {
+                    paddingLeft: 20
+                },
+                headerLeft: <Icon name='arrow-left' type="font-awesome" size={22} color='white'
+                                onPress={() => navigation.navigate('Quotes')}
+                            />
+            })}
+
+    },
+    {
+        initialRouteName: 'Quotes'
     }
 );
 const AuthorsNavigator = createStackNavigator(
@@ -111,11 +186,26 @@ const AuthorsNavigator = createStackNavigator(
                                 onPress={() => navigation.toggleDrawer()}
                             />
             })
-        }
-    }
-);
-/*const QuoteNavigator = createStackNavigator(
-    {
+        },
+        Quotes: {
+            screen: Quotes,
+            navigationOptions: ({ navigation }) => ({
+                //Common config for all the screens
+                headerStyle: {
+                    backgroundColor: '#512DA8'
+                },
+                headerTintColor: '#fff',
+                headerTitleStyle: {
+                    color: '#fff'
+                },
+                headerLeftContainerStyle: {
+                    paddingLeft: 20
+                },
+                headerLeft: <Icon name='arrow-left' type="font-awesome" size={22} color='white'
+                                onPress={() => navigation.navigate('Authors')}
+                            />
+            })
+        },
         Quote: {
             screen: Quote,
             navigationOptions: ({ navigation }) => ({
@@ -130,13 +220,13 @@ const AuthorsNavigator = createStackNavigator(
                 headerLeftContainerStyle: {
                     paddingLeft: 20
                 },
-                headerLeft: <Icon name='menu' size={24} color='white'
-                                onPress={() => navigation.toggleDrawer()}
+                headerLeft: <Icon name='arrow-left' type="font-awesome" size={22} color='white'
+                                onPress={() => navigation.goBack()}
                             />
             })}
     }
 );
-*/
+
 const CustomDrawerContentComponent = (props) => (
     <ScrollView>
         <SafeAreaView style={styles.container}
@@ -218,31 +308,40 @@ const MainNavigator = createDrawerNavigator(
                         />
                 )
             }
-        }/*,
-        Quote: {
-            screen: QuoteNavigator,
-            navigationOptions: {
-                title: 'Cita',
-                drawerLabel: 'Cita',
-                drawerIcon: ({ tintColor }) => (
-                    <Icon 
-                        name='address-card'
-                        type='font-awesome'
-                        size={22}
-                        color={tintColor}
-                        />
-                )
-            }
-        }*/
-         
+        }
     },
     {
         drawerBackgroundColor: '#D1C4E9',
         contentComponent: CustomDrawerContentComponent
     }
 );
+
+const RootStack = createStackNavigator(
+    {
+      Main: {
+        screen: MainNavigator,
+      },
+      AuthorsModal: {
+        screen: AuthorsModal,
+      },
+      BooksModal:{
+          screen: BooksModal
+      },
+      QuotesModal: {
+          screen: QuotesModal
+      }
+    },
+    {
+      mode: 'modal',
+      headerMode: 'none',
+    }
+  );
   
-const MainContainer = createAppContainer(MainNavigator);
+const MainContainer = createAppContainer(RootStack);
+
+
+///////////////             MAIN                /////////////////////
+
 
 class Main extends Component {
 
@@ -258,12 +357,15 @@ class Main extends Component {
 
     render () {
         return (
-            <MainContainer style={{flex: 1}}/>
+            <MainContainer style={{flex: 1}}/>       
         );
     }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);
+
+
+/////////////////////// STYLES  ///////////////////////////////////
 
 const styles = StyleSheet.create({
     container: {

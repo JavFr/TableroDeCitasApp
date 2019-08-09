@@ -1,9 +1,15 @@
+//MODULES
 import React, {Component} from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
-import { ListItem } from 'react-native-elements';
-import { connect } from 'react-redux';
-import { baseUrl } from '../shared/baseUrl';
+import { View, Text, StyleSheet, FlatList, ScrollView } from 'react-native';
+import { ListItem, Button, Icon } from 'react-native-elements';
+
+//COMPONENTS
 import  RenderListAuthors  from './RenderListAuthors';
+import {Loading} from './LoadingComponent';
+import { ToggleForms } from './ToggleFormsComponent';
+
+//REDUX
+import { connect } from 'react-redux';
 
 const mapStateToProps = state => {
     return {
@@ -30,7 +36,10 @@ class Authors extends Component{
         }
         else{
             return(
-                <RenderListAuthors authors={this.props.authors.authors} />
+                <View style={{flex: 1}}>
+                    <RenderListAuthors authors={this.props.authors.authors} onPress={(param) => this.props.navigation.navigate('Quotes', param)}/>
+                    <ToggleForms onPress={(params) => this.props.navigation.navigate(params)}/>
+                </View>
             ); 
         }
     }

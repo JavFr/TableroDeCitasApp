@@ -12,7 +12,6 @@ export default function RenderListQuotes (props) {
                 leftAvatar={item.authorAvatar != ''? {source: {uri: baseUrl + item.authorAvatar}} : {title: item.authorName[0]}}
                 title={item.quote.length <= 55? item.quote : item.quote.slice(0,55) + '...'} 
                 subtitle={item.author}
-                chevron={true}
                 onPress={() => props.onPress({quoteId: item.id})}
             />
         );

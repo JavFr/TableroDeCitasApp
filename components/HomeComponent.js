@@ -1,9 +1,13 @@
+//MODULES
 import React, {Component} from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Card, Icon, Avatar, SocialIcon, ButtonGroup, SearchBar } from 'react-native-elements';
+import { View, Text } from 'react-native';
+
+//COMPONENTS
 import RenderFullQuote from './RenderQuoteComponent';
 import {Loading} from './LoadingComponent';
-//import  RenderFullQuote  from './RenderQuoteComponent';
+import { ToggleForms } from './ToggleFormsComponent';
+
+//REDUX
 import { connect } from 'react-redux';
 
 
@@ -34,7 +38,12 @@ class Home extends Component {
             return (<View><Text>{this.props.quotes.errMess}</Text></View>);
         }
         else {
-            return(<RenderFullQuote quote={this.props.quotes.quotes[0]}/>);
+            return(
+                <View style={{flex: 1}}>
+                    <RenderFullQuote quote={this.props.quotes.quotes[0]}/>
+                    <ToggleForms onPress={(params) => this.props.navigation.navigate(params)}/>
+                </View>
+                );
         }
     }
 }

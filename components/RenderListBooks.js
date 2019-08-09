@@ -12,6 +12,7 @@ export default function RenderListBooks (props) {
                     leftAvatar={item.image != ''? {source: {uri: baseUrl + item.image}} : {title: item.name[0]}}
                     title={item.name}
                     subtitle={item.author}
+                    onPress={() => props.onPress({filter: 'book', key: item.id, name: item.name})}
                 />
         ); 
     }
